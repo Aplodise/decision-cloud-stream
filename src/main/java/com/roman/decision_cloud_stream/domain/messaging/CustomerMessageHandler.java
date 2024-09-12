@@ -34,38 +34,21 @@ public class CustomerMessageHandler {
 
 
     // Function to consume CustomerCreated event and publish transformed Decision event
-//    @Bean
-//    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated(){
-//        return customerCreated -> {
-//            log.info("processing (transforming) the event: {}", customerCreated);
-//            CustomerDTO customerDTO = customerCreated.customer();
-//            if(customerDTO.firstName().startsWith("N")) {
-//                throw new IllegalStateException("The customer is invalid");
-//            } else if (customerDTO.firstName().startsWith("F")) {
-//                throw new RetryableException("This exception is retryable");
-//            }
-//            Decision decision = decisionMakerService.decide(customerDTO.ssn(), customerDTO.birthDate());
-//            log.info("producing the decision: {}", decision);
-//            return decision;
-//        };
-//    }
     @Bean
-    public Consumer<Message<CustomerEvent.CustomerCreated>> handleCustomerCreated(){
-        return customerCreatedMessage -> {
-            log.info("[customerCreated] messsageHandler is handling of type -----------> {}", customerCreatedMessage.getHeaders().get("X-EVENT-TYPE"));
-            log.info("The message is: {}", customerCreatedMessage.getPayload());
-            decisionMakerService.decide(customerCreatedMessage.getPayload().customer().ssn(), customerCreatedMessage.getPayload().customer().birthDate());
+    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated(){
+        return customerCreated -> {
+            log.info("processing (transforming) the event: {}", customerCreated);
+            CustomerDTO customerDTO = customerCreated.customer();
+            if(customerDTO.firstName().startsWith("N")) {
+                throw new IllegalStateException("The customer is invalid");
+            } else if (customerDTO.firstName().startsWith("F")) {
+                throw new RetryableException("This exception is retryable");
+            }
+            Decision decision = decisionMakerService.decide(customerDTO.ssn(), customerDTO.birthDate());
+            log.info("producing the decision: {}", decision);
+            return decision;
         };
     }
-
-    @Bean
-    public Consumer<Message<CustomerEvent.EmailChanged>> handleEmailChanged(){
-        return emailChangedMessage -> {
-            log.info("[customerCreated] messsageHandler is handling of type -----------> {}", emailChangedMessage.getHeaders().get("X-EVENT-TYPE"));
-            log.info("The message is: {}", emailChangedMessage.getPayload());
-        };
-    }
-
 
 
 
