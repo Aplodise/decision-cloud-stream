@@ -10,7 +10,7 @@ public sealed interface CustomerEvent extends Serializable {
     record CustomerCreated(Long customerId, Instant createdAt, CustomerDTO customer) implements CustomerEvent{
 
     }
-    record EmailChanged(Long customerId, Instant createdAt, CustomerDTO customer) implements CustomerEvent {
+    record EmailChanged(Long customerId, Instant changedAt, CustomerDTO customer) implements CustomerEvent {
 
     }
 }

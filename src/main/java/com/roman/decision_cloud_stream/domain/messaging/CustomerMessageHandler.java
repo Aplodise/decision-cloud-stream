@@ -10,9 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
-
 import java.util.function.Consumer;
-import java.util.function.Function;
+
 
 @Configuration
 @Slf4j
@@ -20,35 +19,6 @@ import java.util.function.Function;
 public class CustomerMessageHandler {
     private final DecisionMakerService decisionMakerService;
 
-    // Consumer of CustomerCreated events
-//    @Bean
-//    public Consumer<CustomerEvent.CustomerCreated> handleCustomerCreated(){
-//        return this::handle;
-//    }
-
-//    private void handle(CustomerEvent.CustomerCreated customerCreated){
-//        log.info("consuming the event: {}", customerCreated);
-//        CustomerDTO customerDTO = customerCreated.customer();
-//        decisionMakerService.decide(customerDTO.ssn(), customerDTO.birthDate());
-//    }
-
-
-    // Function to consume CustomerCreated event and publish transformed Decision event
-//    @Bean
-//    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated(){
-//        return customerCreated -> {
-//            log.info("processing (transforming) the event: {}", customerCreated);
-//            CustomerDTO customerDTO = customerCreated.customer();
-//            if(customerDTO.firstName().startsWith("N")) {
-//                throw new IllegalStateException("The customer is invalid");
-//            } else if (customerDTO.firstName().startsWith("F")) {
-//                throw new RetryableException("This exception is retryable");
-//            }
-//            Decision decision = decisionMakerService.decide(customerDTO.ssn(), customerDTO.birthDate());
-//            log.info("producing the decision: {}", decision);
-//            return decision;
-//        };
-//    }
     @Bean
     public Consumer<Message<CustomerEvent.CustomerCreated>> handleCustomerCreated(){
         return customerCreatedMessage -> {
